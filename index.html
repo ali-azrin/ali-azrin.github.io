@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Service Provider</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-11WREKDPP9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-11WREKDPP9');
+    </script>
+    
+</head>
+<body>
+
+    <div class="container mt-3">
+        <h2>Service Provider</h2>
+        
+        
+                <form class="form-inline" class="form-row" novalidate action = "" method = "POST" >
+                    <div class="form-group mb-2 ">
+                      <label for="msisdn" class="sr-only">msisdn</label>
+                      <input type="text" readonly class="form-control-plaintext" id="msisdn" value="MSISDN: ">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <label for="validationDefault01" class="sr-only">msisdn</label>
+                      <input type="number" name="msisdn"  class="form-control" id="validationDefault01" placeholder="6" required>
+
+                    </div>
+<!--                    <div class="invalid-feedback">
+                        Please provide a valid MSISDN.
+                    </div>-->
+                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                    
+                </form>
+        
+        
+
+            
+            
+            <?php
+        //check if user put the amount
+        if(!isset($_POST['msisdn'])){
+//            echo "Please insert MSISDN"; 
+        }
+        //to check correct number enter
+        else if(ctype_alpha($_POST['msisdn'])==TRUE){
+//            echo "Please enter valid MSISDN<br/>";
+        }
+        //to check the amount insert
+         else if(isset ($_POST['msisdn'])){
+            $msisdn = floatval($_POST['msisdn']);
+            
+
+            include_once 'connect_pdo_1.php'; 
+            $sql = "SELECT COUNT(*) FROM `mobile_number` WHERE $msisdn BETWEEN startMSISDN and endMSISDN";
+            if ($res = $conn->query($sql)) {
+
+                /* Check the number of rows that match the SELECT statement */
+                if ($res->fetchColumn() > 0) {
+
+                    /* Issue the real SELECT statement and work with the results */
+                    $sql = "SELECT serviceProvider FROM `mobile_number` WHERE $msisdn BETWEEN startMSISDN and endMSISDN";
+
+                    foreach ($conn->query($sql) as $row) {
+                        echo $msisdn." = ". $row['serviceProvider'] . "\n" . "<hr>";
+                    }
+                }
+
+                /* No rows matched -- do something else */
+                else {
+                    print "Invalid MSISDN.". "<br>";
+                }
+            }
+ 
+         }
+            ?>
+              
+        <h></h>
+            <p>This query is to determine Originated Service provider based on number range and <b/> NOT the current service provider. 
+                Last update: April 27, 2021  </b></p>
+            <!--<p>This will be upgrade</p>-->
+            <a href="https://www.mcmc.gov.my/sectors/celco/numbering-management/numbering-management/numbers-assignment" target="_blank">Reference</a>
+
+            </p><a href="../index.php">Back to main menu</a></p>
+
+
+    </div>
